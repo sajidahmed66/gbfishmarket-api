@@ -9,7 +9,7 @@ import {
   Entity,
 } from "typeorm";
 
-import { RoleUser } from "./RoleUser";
+import { RoleUser } from "./RoleUser.entity";
 
 @Entity("user")
 export class User extends BaseEntity {
