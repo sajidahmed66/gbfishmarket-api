@@ -1,19 +1,19 @@
 import {
   Column,
-  PrimaryColumn,
   BaseEntity,
   OneToOne,
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
   Entity,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { RoleUser } from "./RoleUser.entity";
 
 @Entity("user")
 export class User extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -29,7 +29,7 @@ export class User extends BaseEntity {
 
   @OneToOne(() => RoleUser)
   @JoinColumn()
-  role_id: RoleUser;
+  role: RoleUser;
 
   @CreateDateColumn()
   created_at: Date;

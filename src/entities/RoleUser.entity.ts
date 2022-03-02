@@ -1,15 +1,15 @@
 import {
   Column,
-  PrimaryColumn,
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
   Entity,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 @Entity("user_role")
 export class RoleUser extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
