@@ -1,8 +1,10 @@
 import { Router, Request, Response } from "express";
 import {
   addUser,
+  deleteUser,
   getAllUsers,
   getUserById,
+  updateUser,
   //   updateUser,
 } from "../controllers/user.controller";
 import { role, getRole } from "../controllers/roleUser.controller";
@@ -12,8 +14,7 @@ const router = Router();
 // add+ update+delete + list of total admin sub-Admin vai super admin to database
 //
 router.route("/").get(getAllUsers).post(addUser);
-router.route("/:userId").get(getUserById);
-// .put(updateUser);
+router.route("/:userId").get(getUserById).put(updateUser).delete(deleteUser);
 
 router.route("/role").get(getRole).post(role);
 

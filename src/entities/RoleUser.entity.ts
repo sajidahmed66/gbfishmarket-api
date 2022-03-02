@@ -6,6 +6,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User.entity";
 @Entity("user_role")
@@ -15,8 +16,10 @@ export class RoleUser extends BaseEntity {
 
   @Column()
   user_role_name: string;
-  @ManyToOne(() => User, (user) => user.role)
+
+  @OneToMany(() => User, (user) => user.role)
   user: User;
+
   @CreateDateColumn()
   created_at: Date;
 

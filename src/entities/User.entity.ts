@@ -1,13 +1,11 @@
 import {
   Column,
   BaseEntity,
-  OneToOne,
-  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  OneToMany,
+  ManyToOne,
 } from "typeorm";
 
 import { RoleUser } from "./RoleUser.entity";
@@ -28,7 +26,10 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany(() => RoleUser, (role) => role.user)
+  @ManyToOne(() => RoleUser, (role) => role.user, {
+    cascade: true,
+    nullable: false,
+  })
   role: RoleUser;
 
   @CreateDateColumn()
