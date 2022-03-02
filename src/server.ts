@@ -2,10 +2,16 @@ import "dotenv/config";
 import express, { Application } from "express";
 import { routes } from "./middlewares/route";
 import { main } from "./utils/dbConfig";
+
 const app: Application = express();
-main();
+
+//middlewares
 routes(app);
 
-app.listen(5000, () => {
-  console.log("Server is running on port 5000");
+const port = process.env.PORT || 5000;
+//dbconnections
+main().then(() => {
+  app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+  });
 });

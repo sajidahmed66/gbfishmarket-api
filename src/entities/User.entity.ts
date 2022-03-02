@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from "typeorm";
 
 import { RoleUser } from "./RoleUser.entity";
@@ -27,8 +28,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToOne(() => RoleUser)
-  @JoinColumn()
+  @OneToMany(() => RoleUser, (role) => role.user)
   role: RoleUser;
 
   @CreateDateColumn()
