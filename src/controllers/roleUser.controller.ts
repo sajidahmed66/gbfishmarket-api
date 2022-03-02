@@ -9,8 +9,15 @@ export const role = async (req: Request, res: Response) => {
     const roleUser = await manager.save(newRoleUser);
     res.send(roleUser);
   } catch (error) {
+    res.status(400).send("something went wrong");
     console.log("Invalid Input", error);
   }
 
   //   res.send("user!");
+};
+
+export const getRole = async (req: Request, res: Response) => {
+  const entityManeger = getManager();
+  const result = await entityManeger.find(RoleUser);
+  res.send(result);
 };

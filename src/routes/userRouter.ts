@@ -1,12 +1,20 @@
 import { Router, Request, Response } from "express";
-import { user } from "../controllers/user.controller";
-import { role } from "../controllers/roleUser.controller";
+import {
+  addUser,
+  getAllUsers,
+  getUserById,
+  //   updateUser,
+} from "../controllers/user.controller";
+import { role, getRole } from "../controllers/roleUser.controller";
 const router = Router();
 
 // auth or login
 // add+ update+delete + list of total admin sub-Admin vai super admin to database
 //
-router.route("/").post(user);
-router.route("/role").post(role);
-const userRouter = router;
-export default userRouter;
+router.route("/").get(getAllUsers).post(addUser);
+router.route("/:userId").get(getUserById);
+// .put(updateUser);
+
+router.route("/role").get(getRole).post(role);
+
+export { router as userRouter };
