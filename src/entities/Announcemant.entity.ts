@@ -1,30 +1,28 @@
 import {
+  Entity,
   Column,
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
-  Entity,
   PrimaryGeneratedColumn,
-  ManyToOne,
 } from "typeorm";
 
-import { Client } from "./Clients.entity";
-@Entity("products")
-export class Products extends BaseEntity {
+@Entity("announcement")
+export class Announcement extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   title: string;
 
-  @Column()
-  subtitle: string;
+  // @Column()
+  // subtitle: string;
 
   @Column()
   short_description: string;
 
-  @Column()
-  long_description: string;
+  // @Column()
+  // long_description: string;
 
   @Column()
   image_name: string;
@@ -35,8 +33,6 @@ export class Products extends BaseEntity {
   @Column()
   show_on_home: boolean;
 
-  // @ManyToOne(() => Client)
-  // client: Client;
   @CreateDateColumn()
   created_at: Date;
 
