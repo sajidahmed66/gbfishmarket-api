@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import { RoleUser } from "./RoleUser.entity";
+import * as jwt from "jsonwebtoken";
 
 @Entity("user")
 export class User extends BaseEntity {
@@ -37,4 +38,19 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  // method to generate a jwt token
+
+  generateAuthToken = () => {
+    return jwt.sign(
+      {
+        id: this.id,
+        name: this.name,
+        email: this.email,
+        role: this.role,
+      },
+      "JWT_SECRET",
+      { expiresIn: "12h" }
+    );
+  };
 }
