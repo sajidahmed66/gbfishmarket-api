@@ -13,13 +13,10 @@ export const role = async (req: Request, res: Response) => {
     res.status(400).send("something went wrong");
     console.log("Invalid Input", error);
   }
-
-  //   res.send("user!");
 };
 
 // get all roles
 export const getRole = async (req: Request, res: Response) => {
-  // console.log(req.body.user);
   const entityManeger = getManager();
   const result = await entityManeger.find(RoleUser);
   res.send(result);

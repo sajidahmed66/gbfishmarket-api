@@ -40,6 +40,7 @@ export class Client extends BaseEntity {
   logo_image_link: string;
 
   @OneToMany(() => Products, (products) => products.client)
+
   @JoinTable({
     name: "client_products",
     joinColumn: { name: "client", referencedColumnName: "id" },

@@ -35,7 +35,12 @@ export class Products extends BaseEntity {
   @Column()
   show_on_home: boolean;
 
-  // @ManyToOne(() => Client)
+  @ManyToOne(() => Client, (client) => client.products, {
+    cascade: true,
+    nullable: true,
+  })
+  client: Client;
+
   // client: Client;
   @CreateDateColumn()
   created_at: Date;
