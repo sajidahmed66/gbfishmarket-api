@@ -1,6 +1,7 @@
 import { createConnection } from "typeorm";
 import { RoleUser } from "../entities/RoleUser.entity";
 import { User } from "../entities/User.entity";
+import { Logo } from "../entities/Logo.entity";
 
 export const main = async () => {
   try {
@@ -11,7 +12,7 @@ export const main = async () => {
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [RoleUser, User],
+      entities: [RoleUser, User, Logo],
       synchronize: true,
     });
     console.log("Connected to database");
