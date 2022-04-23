@@ -3,7 +3,7 @@ import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "src/uploads/");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     const { originalname } = file;
@@ -17,10 +17,10 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  if (file.mimetype.split("/")[0] === "image") {
+  if ((file.mimetype.split("/")[0] === "image")&&(file.mimetype === "image/jpg"||file.mimetype === "image/png"||file.mimetype === "image/jpeg")) {
     cb(null, true);
   } else {
-    cb(new Error("some error"));
+    cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
   }
 };
 

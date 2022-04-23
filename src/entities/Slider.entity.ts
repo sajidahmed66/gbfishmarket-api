@@ -18,10 +18,10 @@ export class Slider extends BaseEntity {
   @Column()
   file_link: string;
 
-  @Column()
+  @Column({ nullable: true })
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Column()

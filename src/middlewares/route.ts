@@ -11,5 +11,5 @@ export const routes = (app: Application) => {
     app.use(morgan("dev"));
   }
   app.use("/api/users", userRouter); //routes of user admin
-  app.use("/api/home", homeRouter); //routes of home"
+  app.use("/api/admin/home", homeRouter); //routes of home"
 };

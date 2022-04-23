@@ -19,6 +19,6 @@ router.route("/").get(getAllUsers).post(addUser);
 router.route("/role").get([authorize], getRole).post(role);
 router.route("/login").post(logIn);
 router.route("/:userId").get(getUserById).put(updateUser).delete(deleteUser);
-// rooute that adds image
+// route that adds image
 
 export { router as userRouter };
