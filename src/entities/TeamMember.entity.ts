@@ -27,7 +27,8 @@ export class TeamMember extends BaseEntity {
 
   @ManyToOne(
     () => CompanyProfile,
-    (companyProfile) => companyProfile.teamMember
+    (companyProfile) => companyProfile.teamMember,
+    { nullable: false }
   )
   companyProfile: CompanyProfile;
 

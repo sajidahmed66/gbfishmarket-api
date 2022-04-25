@@ -37,7 +37,9 @@ export class CompanyProfile extends BaseEntity {
 
   @Column()
   phone: string;
-  @OneToMany(() => TeamMember, (teamMember) => teamMember.companyProfile)
+  @OneToMany(() => TeamMember, (teamMember) => teamMember.companyProfile, {
+    nullable: true,
+  })
   teamMember: TeamMember[];
 
   @CreateDateColumn()
