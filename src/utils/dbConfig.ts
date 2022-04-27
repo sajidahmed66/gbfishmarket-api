@@ -7,7 +7,7 @@ import { CompanyProfile } from "../entities/CompanyProfile.entity";
 import { TeamMember } from "../entities/TeamMember.entity";
 import { Products } from "../entities/Products.entity";
 import { Client } from "../entities/Clients.entity";
-import { Announcement } from "../entities/Announcemant.entity";
+import { Announcement } from "../entities/Announcement.entity";
 
 export const main = async () => {
   try {
