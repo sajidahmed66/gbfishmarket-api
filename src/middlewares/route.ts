@@ -9,7 +9,7 @@ import { aboutusRouter } from "../routes/aboutusRouter";
 import { companyRouter } from "../routes/companyRouter";
 import { teamRouter } from "../routes/teamRouter";
 import { productsRouter } from "../routes/productsRouters";
-// import { clientRouter } from "../routes/clientRouter";
+import { clientRouter } from "../routes/clientRouter";
 // import { announcementRouter } from "../routes/announcementRouter";
 
 export const routes = (app: Application) => {
@@ -27,6 +27,6 @@ export const routes = (app: Application) => {
   app.use("/api/admin/mycompany", companyRouter);
   app.use("/api/admin/myteam", teamRouter);
   app.use("/api/admin/products", productsRouter);
-  // app.use("api/admin/client", clientRouter);
+  app.use("/api/admin/client", clientRouter);
   // app.use("api/admin/announcement", announcementRouter);
 };
