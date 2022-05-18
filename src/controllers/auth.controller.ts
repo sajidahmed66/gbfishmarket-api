@@ -10,11 +10,11 @@ export const logIn = async (req: Request, res: Response) => {
     where: { email },
   })) as User;
   if (!user) {
-    return res.status(404).send("User not found");
+    return res.status(404).send("User not found"); // 404 Not Found
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    res.status(401).send("Invalid Email or Password");
+    return res.status(401).send("Invalid Email or Password nad more"); // 401 Unauthorized
   }
   const token = user.generateAuthToken();
   return res.send({ token });
