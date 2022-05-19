@@ -10,10 +10,11 @@ import {
   updateSliderImageById,
   uploadSliderImage,
 } from "../controllers/slider.controller";
+import { authorize } from "../middlewares/authorize";
 
 const router = Router();
-router.route("/logo").post(uploadLogo).get(getLogo);
-router.route("/logo/:id").put(updateLogoById);
+router.route("/logo").post([authorize], uploadLogo).get(getLogo);
+router.route("/logo/:id").put([authorize], updateLogoById);
 router.route("/slider-image").get(getAllSliders).post(uploadSliderImage);
 router
   .route("/slider-image/:sliderId")
