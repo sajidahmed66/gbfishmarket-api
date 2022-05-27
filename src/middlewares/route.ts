@@ -11,7 +11,7 @@ import { teamRouter } from "../routes/teamRouter";
 import { productsRouter } from "../routes/productsRouters";
 import { clientRouter } from "../routes/clientRouter";
 import { announcementRouter } from "../routes/announcementRouter";
-
+import { contactusRouter } from "../routes/contactusRouter";
 export const routes = (app: Application) => {
   app.use(cors());
   app.use(express.json());
@@ -29,4 +29,5 @@ export const routes = (app: Application) => {
   app.use("/api/admin/products", productsRouter);
   app.use("/api/admin/client", clientRouter);
   app.use("/api/admin/announcement", announcementRouter);
+  app.use("/api/admin/contact-us", contactusRouter);
 };
