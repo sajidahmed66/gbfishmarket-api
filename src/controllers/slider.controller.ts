@@ -7,6 +7,7 @@ import { upload } from "../middlewares/multerConfig";
 // Add slider Image , slider text and slider description
 
 export const uploadSliderImage = async (req: Request, res: Response) => {
+  console.log("req.body", req.body);
   upload.single("file")(req, res, async (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
@@ -14,18 +15,24 @@ export const uploadSliderImage = async (req: Request, res: Response) => {
       });
     }
     const { name, title, description, show_on_home } = req.body;
+
+    console.log("reqbody", req.body);
     if (req.file) {
       const manager = getManager();
       const newSliderImage = manager.create(Slider, {
         name,
         title,
         description,
-        show_on_home,
+        show_on_home: "true" ? true : false,
         file_link: req.file.path,
       });
-      await manager.save(newSliderImage);
-      return res.status(200).json({
-        message: "success",
+      let result = await manager.save(newSliderImage);
+      if (!result) {
+        return res.status(500).send("Error creating Banner");
+      }
+      return res.status(201).json({
+        message: "success creating Banner",
+        result,
       });
     } else {
       // TODO new Error("Error uploading file");
@@ -77,6 +84,4 @@ export const getSliderById = async (req: Request, res: Response) => {
 
 // Update slider By Id
 
-export const updateSliderImageById = async (req:Request,res:Response)=>{
-    
-};
+export const updateSliderImageById = async (req: Request, res: Response) => {};
