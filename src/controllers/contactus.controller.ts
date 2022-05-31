@@ -20,7 +20,10 @@ export const postContactMessage = async (req: Request, res: Response) => {
   const message = new Message();
   message.name = req.body.name;
   message.email = req.body.email;
-  message.phone = req.body.phone;
+  message.phone =
+    typeof req.body.phone === "string"
+      ? parseInt(req.body.phone)
+      : req.body.phone;
   message.message = req.body.message;
   let result = await manager.save(message);
   if (!result)

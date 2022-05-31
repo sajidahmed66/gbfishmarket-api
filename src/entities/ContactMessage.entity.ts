@@ -18,8 +18,8 @@ export class Message extends BaseEntity {
   @Column()
   email: string;
 
-  @Column()
-  phone: string;
+  @Column({ type: "bigint" })
+  phone: number;
 
   @Column()
   message: string;

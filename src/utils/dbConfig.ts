@@ -8,6 +8,7 @@ import { TeamMember } from "../entities/TeamMember.entity";
 import { Products } from "../entities/Products.entity";
 import { Client } from "../entities/Clients.entity";
 import { Announcement } from "../entities/Announcement.entity";
+import { Message } from "../entities/ContactMessage.entity";
 
 export const main = async () => {
   try {
@@ -28,6 +29,7 @@ export const main = async () => {
         Announcement,
         Client,
         Products,
+        Message,
       ],
       synchronize: true,
     });
