@@ -21,7 +21,7 @@ export const authorize = async (
   try {
     let secret = process.env.JWT_SECRET as string;
     let decoded = jwt.verify(token, secret);
-    console.log(decoded);
+    // console.log(decoded);
     req.body.user = decoded; // do this on req.header
     next();
   } catch (err) {

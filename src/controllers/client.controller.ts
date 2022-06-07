@@ -14,7 +14,7 @@ export const createClient = async (req: Request, res: Response) => {
     }
 
     if (req.file) {
-      const {
+      let {
         name,
         company_name,
         location_lat,
@@ -24,16 +24,27 @@ export const createClient = async (req: Request, res: Response) => {
         logo_image_name,
       } = req.body;
       const manager = getManager();
-      const newClient = manager.create(Client, {
-        name,
-        company_name,
-        location_lat,
-        location_long,
-        location_address,
-        company_description,
-        logo_image_name,
-        logo_image_link: req.file.path,
-      });
+      const newClient = new Client();
+      newClient.name = name;
+      newClient.company_name = company_name;
+      newClient.location_lat =
+        typeof location_lat === "string" ? parseInt(location_lat) : 0;
+      newClient.location_long =
+        typeof location_long === "string" ? parseInt(location_long) : 0;
+      newClient.location_address = location_address;
+      newClient.company_description = company_description;
+      newClient.logo_image_name = logo_image_name;
+      newClient.logo_image_link = req.file.path;
+      // const newClient = manager.create(Client, {
+      //   name,
+      //   company_name,
+      //   location_lat,
+      //   location_long,
+      //   location_address,
+      //   company_description,
+      //   logo_image_name,
+      //   logo_image_link: req.file.path,
+      // });
       let result = await manager.save(newClient);
       if (!result) {
         return res.status(500).json({
@@ -41,7 +52,7 @@ export const createClient = async (req: Request, res: Response) => {
         });
       }
       return res.status(200).json({
-        message: "success",
+        message: "success creating client",
       });
     } else {
       return res.status(500).json({
