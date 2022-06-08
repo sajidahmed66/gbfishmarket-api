@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { Client } from "../entities/Clients.entity";
+import { Products } from "../entities/Products.entity";
 import { upload } from "../middlewares/multerConfig";
 import multer from "multer";
 import * as fs from "fs";
@@ -167,6 +168,54 @@ export const deleteClientById = async (req: Request, res: Response) => {
   if (!result) {
     return res.status(500).json({
       message: "Error deleting client",
+    });
+  }
+  return res.status(200).json({
+    message: "success",
+  });
+};
+
+export const getClientProducts = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const manager = getManager();
+  let client = await manager.findOne(Client, id, { relations: ["products"] });
+  if (!client) {
+    return res.status(500).json({
+      message: "client not found",
+    });
+  }
+  return res.status(200).json({
+    message: "success",
+    client,
+  });
+};
+
+export const updateClientProducts = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { productsId, action } = req.body;
+  const manager = getManager();
+  let client = await manager.findOne(Client, id, { relations: ["products"] });
+  if (!client) {
+    return res.status(500).json({
+      message: "client not found",
+    });
+  }
+  let products = await manager.findOne(Products, productsId);
+  if (!products) {
+    return res.status(500).json({
+      message: "product not found",
+    });
+  }
+  if (action === "add") {
+    client.products.push(products);
+  }
+  if (action === "remove") {
+    client.products.splice(client.products.indexOf(products), 1);
+  }
+  let result = await manager.save(client);
+  if (!result) {
+    return res.status(500).json({
+      message: "Error updating client",
     });
   }
   return res.status(200).json({
