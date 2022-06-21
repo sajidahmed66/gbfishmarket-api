@@ -9,6 +9,9 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc "
   },
+  "engines": {
+    "node": "16.9.1"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
