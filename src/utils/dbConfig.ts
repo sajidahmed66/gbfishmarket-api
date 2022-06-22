@@ -32,6 +32,10 @@ export const main = async () => {
         Message,
       ],
       synchronize: true,
+      ssl: {
+        rejectUnauthorized: false,
+        requestCert: true,
+      },
     });
     console.log("Connected to database");
   } catch (error) {
