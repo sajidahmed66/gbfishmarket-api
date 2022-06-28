@@ -8,6 +8,8 @@ import * as fs from "fs";
 //create a product
 export const createProduct = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
+    console.log(req.body);
+    console.log(typeof req.body.show_on_home);
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
         message: error.code,
@@ -31,7 +33,7 @@ export const createProduct = async (req: Request, res: Response) => {
         short_description,
         long_description,
         image_name,
-        show_on_home: "true" ? true : false,
+        show_on_home: show_on_home === "true" ? true : false,
         client: client_id,
         image_link: req.file.path,
       });
@@ -60,7 +62,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
   if (!products) {
     return res.status(404).send("NO Products was found");
   }
-  return res.send(products);
+  return res.status(200).send(products);
 };
 
 // get product by id
@@ -71,7 +73,7 @@ export const getProductById = async (req: Request, res: Response) => {
   if (!product) {
     return res.status(404).send("Product not found");
   }
-  return res.send(product);
+  return res.status(200).send(product);
 };
 
 //update product by id
@@ -134,6 +136,7 @@ export const updateProductById = async (req: Request, res: Response) => {
         show_on_home,
         client_id,
       } = req.body;
+      console.log(show_on_home);
       const updatedProduct = await entityManager.update(Products, id, {
         title,
         subtitle,
@@ -148,7 +151,7 @@ export const updateProductById = async (req: Request, res: Response) => {
       }
       return res.status(200).json({
         message: "success updating product",
-        result: product,
+        result: updatedProduct,
       });
     }
   });
@@ -160,7 +163,7 @@ export const deleteProductById = async (req: Request, res: Response) => {
   const entityManager = getManager();
   const product = await entityManager.findOne(Products, id);
   if (!product) {
-    return res.status(404).send("Product not found");
+    return res.status(404).json({ message: "Product not found" });
   }
   const oldImage = product.image_link;
   fs.unlink(oldImage, (err) => {

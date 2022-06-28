@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { Client } from "../entities/Clients.entity";
+import { Products } from "../entities/Products.entity";
 import { upload } from "../middlewares/multerConfig";
 import multer from "multer";
 import * as fs from "fs";
@@ -14,7 +15,7 @@ export const createClient = async (req: Request, res: Response) => {
     }
 
     if (req.file) {
-      const {
+      let {
         name,
         company_name,
         location_lat,
@@ -24,16 +25,27 @@ export const createClient = async (req: Request, res: Response) => {
         logo_image_name,
       } = req.body;
       const manager = getManager();
-      const newClient = manager.create(Client, {
-        name,
-        company_name,
-        location_lat,
-        location_long,
-        location_address,
-        company_description,
-        logo_image_name,
-        logo_image_link: req.file.path,
-      });
+      const newClient = new Client();
+      newClient.name = name;
+      newClient.company_name = company_name;
+      newClient.location_lat =
+        typeof location_lat === "string" ? parseInt(location_lat) : 0;
+      newClient.location_long =
+        typeof location_long === "string" ? parseInt(location_long) : 0;
+      newClient.location_address = location_address;
+      newClient.company_description = company_description;
+      newClient.logo_image_name = logo_image_name;
+      newClient.logo_image_link = req.file.path;
+      // const newClient = manager.create(Client, {
+      //   name,
+      //   company_name,
+      //   location_lat,
+      //   location_long,
+      //   location_address,
+      //   company_description,
+      //   logo_image_name,
+      //   logo_image_link: req.file.path,
+      // });
       let result = await manager.save(newClient);
       if (!result) {
         return res.status(500).json({
@@ -41,7 +53,7 @@ export const createClient = async (req: Request, res: Response) => {
         });
       }
       return res.status(200).json({
-        message: "success",
+        message: "success creating client",
       });
     } else {
       return res.status(500).json({
@@ -156,6 +168,54 @@ export const deleteClientById = async (req: Request, res: Response) => {
   if (!result) {
     return res.status(500).json({
       message: "Error deleting client",
+    });
+  }
+  return res.status(200).json({
+    message: "success",
+  });
+};
+
+export const getClientProducts = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const manager = getManager();
+  let client = await manager.findOne(Client, id, { relations: ["products"] });
+  if (!client) {
+    return res.status(500).json({
+      message: "client not found",
+    });
+  }
+  return res.status(200).json({
+    message: "success",
+    products: client.products,
+  });
+};
+
+export const updateClientProducts = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { productsId, action } = req.body;
+  const manager = getManager();
+  let client = await manager.findOne(Client, id, { relations: ["products"] });
+  if (!client) {
+    return res.status(500).json({
+      message: "client not found",
+    });
+  }
+  let products = await manager.findOne(Products, productsId);
+  if (!products) {
+    return res.status(500).json({
+      message: "product not found",
+    });
+  }
+  if (action === "add") {
+    client.products.push(products);
+  }
+  if (action === "remove") {
+    client.products.splice(client.products.indexOf(products), 1);
+  }
+  let result = await manager.save(client);
+  if (!result) {
+    return res.status(500).json({
+      message: "Error updating client",
     });
   }
   return res.status(200).json({
