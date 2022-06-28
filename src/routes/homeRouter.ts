@@ -19,6 +19,6 @@ router.route("/slider-image").get(getAllSliders).post(uploadSliderImage);
 router
   .route("/slider-image/:sliderId")
   .get(getSliderById)
-  .post(updateSliderImageById);
+  .put(updateSliderImageById);
 
 export { router as homeRouter };
