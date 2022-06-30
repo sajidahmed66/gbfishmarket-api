@@ -15,6 +15,7 @@ export const uploadLogo = async (req: Request, res: Response) => {
 
     const { name } = req.body;
     if (req.file) {
+      console.log(req.file);
       const manager = getManager();
       const newLogo = manager.create(Logo, {
         name,
