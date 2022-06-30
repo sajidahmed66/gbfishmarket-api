@@ -49,5 +49,10 @@ const fileFilter = (
 export const upload = multer({
   storage: storage2,
   fileFilter: fileFilter,
-  limits: { fieldSize: 1024 * 1024 * 5, files: 1 },
+  limits: { fieldSize: 1024 * 1024 * 5},
 });
+
+export const uploadMultiple = upload.fields([
+  { name: "file1", maxCount: 1 },
+  { name: "file2", maxCount: 1 },
+]);

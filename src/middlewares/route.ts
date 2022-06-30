@@ -5,7 +5,6 @@ import morgan from "morgan";
 // router imports
 import { userRouter } from "../routes/userRouter";
 import { homeRouter } from "../routes/homeRouter";
-import { aboutusRouter } from "../routes/aboutusRouter";
 import { companyRouter } from "../routes/companyRouter";
 import { teamRouter } from "../routes/teamRouter";
 import { productsRouter } from "../routes/productsRouters";

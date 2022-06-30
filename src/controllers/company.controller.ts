@@ -16,8 +16,14 @@ export const getCompanyProfile = async (req: Request, res: Response) => {
 };
 
 // boilerplate code
+
+const uploadMultiple = upload.fields([
+  { name: "image_link" },
+  { name: "history_image_link" },
+]);
+
 export const createCompanyProfile = async (req: Request, res: Response) => {
-  upload.single("file")(req, res, async (error) => {
+  uploadMultiple(req, res, async (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
         message: error.code,
@@ -31,15 +37,25 @@ export const createCompanyProfile = async (req: Request, res: Response) => {
       address,
       email,
       phone,
+      history_image_name,
+      history_title,
+      history_description,
+      history_short_description,
     } = req.body;
-    if (req.file) {
+    if (req.files) {
+      const files = req.files as any;
       const entityManager = getManager();
-      const companyProfile = await entityManager.create(CompanyProfile, {
+      const companyProfile = entityManager.create(CompanyProfile, {
         image_name,
-        image_link: req.file.path,
+        image_link: files.image_link[0].path,
         title,
         description,
         short_description,
+        history_image_name,
+        history_title,
+        history_description,
+        history_short_description,
+        history_image_link: files.history_image_link[0].path,
         address,
         email,
         phone,
@@ -64,7 +80,7 @@ export const createCompanyProfile = async (req: Request, res: Response) => {
 // boilerplate code
 export const updateCompanyProfile = async (req: Request, res: Response) => {
   let { id } = req.params;
-  upload.single("file")(req, res, async (error) => {
+  uploadMultiple(req, res, async (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
         message: error.code,
@@ -77,8 +93,13 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
       short_description,
       address,
       email,
+      history_image_name,
+      history_title,
+      history_description,
+      history_short_description,
     } = req.body;
-    if (req.file) {
+    if (req.files) {
+      const files = req.files as any;
       const entityManager = getManager();
       const companyProfile = await entityManager.findOne(CompanyProfile, id);
       if (!companyProfile) {
@@ -94,12 +115,18 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
       });
 
       companyProfile.image_name = image_name;
-      companyProfile.image_link = req.file.path;
+      companyProfile.image_link = files.image_link[0].path;
       companyProfile.title = title;
       companyProfile.description = description;
       companyProfile.short_description = short_description;
       companyProfile.address = address;
       companyProfile.email = email;
+      
+      companyProfile.history_image_name=history_image_name;
+      companyProfile.history_title=history_title;
+      companyProfile.history_description=history_description;
+      companyProfile.history_short_description=history_short_description;
+      companyProfile.history_image_link=files.history_image_link[0].path;
 
       let result = await entityManager.save(companyProfile);
       if (!result) {
@@ -116,15 +143,21 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
         return res.status(404).send("Company Profile not found");
       }
 
+      const files = req.files as any;
       companyProfile.image_name = image_name
         ? image_name
         : companyProfile.image_name;
-      // companyProfile.image_link = req.file.path;
+      companyProfile.image_link = companyProfile.image_link;
       companyProfile.title = title;
       companyProfile.description = description;
       companyProfile.short_description = short_description;
       companyProfile.address = address;
       companyProfile.email = email;
+      companyProfile.history_image_name=history_image_name;
+      companyProfile.history_title=history_title;
+      companyProfile.history_description=history_description;
+      companyProfile.history_short_description=history_short_description;
+      companyProfile.history_image_link=companyProfile.history_image_link;
 
       let result = await entityManager.save(companyProfile);
       if (!result) {

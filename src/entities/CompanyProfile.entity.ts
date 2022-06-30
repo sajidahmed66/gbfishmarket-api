@@ -14,29 +14,45 @@ export class CompanyProfile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   image_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   image_link: string;
 
-  @Column()
+  @Column({ nullable: true })
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   short_description: string;
 
-  @Column()
+  @Column({ nullable: true })
+  history_image_name: string;
+
+  @Column({ nullable: true })
+  history_image_link: string;
+
+  @Column({ nullable: true })
+  history_title: string;
+
+  @Column({ nullable: true })
+  history_description: string;
+
+  @Column({ nullable: true })
+  history_short_description: string;
+
+  @Column({ nullable: true })
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone: string;
+
   @OneToMany(() => TeamMember, (teamMember) => teamMember.companyProfile, {
     nullable: true,
   })
