@@ -3,7 +3,7 @@ import { getManager } from "typeorm";
 import multer from "multer";
 import { Logo } from "../entities/Logo.entity";
 import { upload } from "../middlewares/multerConfig";
-import * as fs from "fs";
+import { cloudinary } from "../middlewares/multerConfig";
 
 export const uploadLogo = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
@@ -15,11 +15,11 @@ export const uploadLogo = async (req: Request, res: Response) => {
 
     const { name } = req.body;
     if (req.file) {
-      console.log(req.file);
       const manager = getManager();
       const newLogo = manager.create(Logo, {
         name,
         file_link: req.file.path,
+        cloudinary_public_id: req.file.filename,
       });
       await manager.save(newLogo);
       return res.status(200).json({
@@ -52,7 +52,6 @@ export const updateLogoById = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
     let { id } = req.params;
     let { name } = req.body;
-    console.log(req.body);
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
         message: error.code,
@@ -61,42 +60,37 @@ export const updateLogoById = async (req: Request, res: Response) => {
     const manager = getManager();
     const logo = await manager.findOne(Logo, id);
 
+    // if requested logo not found
     if (!logo) {
       if (req.file) {
-        let image_path = req.file.path;
-        fs.unlink(image_path, (err) => {
-          if (err) {
-            console.log(err);
-          }
-          console.log("successfully deleted");
-        });
+        cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
       }
       return res.status(404).json({
         message: "Logo not found",
       });
     }
-    console.log(logo);
 
+    // if logo found
     if (req.file) {
-      const oldImage = logo.file_link;
-      fs.unlink(oldImage, (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        console.log("successfully deleted");
-      });
+      let old_image_public_id = logo.cloudinary_public_id;
       const updatedLogo = await manager.update(Logo, id, {
         name,
         file_link: req.file.path,
+        cloudinary_public_id: req.file.filename,
       });
       if (!updatedLogo) {
         return res.status(500).json({
           message: "Error updating logo",
         });
       }
+      cloudinary.uploader.destroy(
+        old_image_public_id,
+        function (error, result) {
+          console.log({ result, error }); // result is an array
+        }
+      );
       return res.status(200).json({
         message: "success updating logo",
-        result: updatedLogo,
       });
     }
   });

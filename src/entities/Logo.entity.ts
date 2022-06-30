@@ -20,7 +20,8 @@ export class Logo extends BaseEntity {
 
   // @Column()
   // description: string;
-
+  @Column()
+  cloudinary_public_id: string;
   @CreateDateColumn()
   created_at: Date;
 

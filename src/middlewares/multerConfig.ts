@@ -5,11 +5,12 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 cloudinary.config({
-  cloud_name: "megaman22",
-  api_key: "254747756327555",
-  api_secret: "IfUWAkalXFrzflU1pj3m9KsZ2eU",
+  cloud_name: process.env.ClOUDINARY_CLOUD_NAME as string,
+  api_key: process.env.ClOUDINARY_API_KEY as string,
+  api_secret: process.env.CLOUDINARY_API_SECRET as string,
 });
 
+export { cloudinary };
 const storage2 = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -49,7 +50,7 @@ const fileFilter = (
 export const upload = multer({
   storage: storage2,
   fileFilter: fileFilter,
-  limits: { fieldSize: 1024 * 1024 * 5},
+  limits: { fieldSize: 1024 * 1024 * 5 },
 });
 
 export const uploadMultiple = upload.fields([
