@@ -33,6 +33,9 @@ export class Products extends BaseEntity {
   image_link: string;
 
   @Column()
+  cloudinary_public_id: string;
+
+  @Column()
   show_on_home: boolean;
 
   @ManyToOne(() => Client, (client) => client.products, {

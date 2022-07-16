@@ -7,12 +7,13 @@ import {
   deleteProductById,
 } from "../controllers/products.controller";
 const router = Router();
+import { authorize } from "../middlewares/authorize";
 
-router.route("/").post(createProduct).get(getAllProducts);
+router.route("/").post([authorize], createProduct).get(getAllProducts);
 router
   .route("/:id")
   .get(getProductById)
-  .put(updateProductById)
-  .delete(deleteProductById);
+  .put([authorize], updateProductById)
+  .delete([authorize], deleteProductById);
 
 export { router as productsRouter };

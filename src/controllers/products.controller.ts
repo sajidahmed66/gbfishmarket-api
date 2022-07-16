@@ -1,15 +1,12 @@
 import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { Products } from "../entities/Products.entity";
-import { upload } from "../middlewares/multerConfig";
+import { upload, cloudinary } from "../middlewares/multerConfig";
 import multer from "multer";
 import * as fs from "fs";
-
 //create a product
 export const createProduct = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
-    console.log(req.body);
-    console.log(typeof req.body.show_on_home);
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
         message: error.code,
@@ -24,7 +21,7 @@ export const createProduct = async (req: Request, res: Response) => {
       show_on_home,
       client_id,
     } = req.body;
-    console.log(typeof !!show_on_home);
+
     if (req.file) {
       const entityManager = getManager();
       const product = await entityManager.create(Products, {
@@ -36,9 +33,14 @@ export const createProduct = async (req: Request, res: Response) => {
         show_on_home: show_on_home === "true" ? true : false,
         client: client_id,
         image_link: req.file.path,
+        cloudinary_public_id: req.file.filename,
       });
       let result = await entityManager.save(product);
       if (!result) {
+        // delete file from cloudinary
+        if (req.file) {
+          cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
+        }
         return res.status(500).send("Error creating product");
       }
       return res.status(201).json({
@@ -79,7 +81,6 @@ export const getProductById = async (req: Request, res: Response) => {
 //update product by id
 export const updateProductById = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
-    console.log("updateProductById");
     const { id } = req.params;
     if (error instanceof multer.MulterError) {
       return res.send(500).json({
@@ -90,16 +91,13 @@ export const updateProductById = async (req: Request, res: Response) => {
     const product = await entityManager.findOne(Products, id);
 
     if (!product) {
+      if (req.file) {
+        cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
+      }
       return res.status(404).send("Product not found");
     }
     if (req.file) {
-      const oldImage = product.image_link;
-      fs.unlink(oldImage, (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        console.log("successfully deleted");
-      });
+      let old_image_public_id = product.cloudinary_public_id;
       const {
         title,
         subtitle,
@@ -118,13 +116,23 @@ export const updateProductById = async (req: Request, res: Response) => {
         show_on_home: show_on_home === "true" ? true : false,
         client: client_id,
         image_link: req.file.path,
+        cloudinary_public_id: req.file.filename,
       });
       if (!updatedProduct) {
+        if (req.file) {
+          cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
+        }
         return res.status(500).send("Error updating product");
       }
+      cloudinary.uploader.destroy(
+        old_image_public_id,
+        function (error, result) {
+          // console.log({ result, error }); // result is an array
+        }
+      );
       return res.status(200).json({
         message: "success updating product",
-        result: updatedProduct,
+        // result: updatedProduct,
       });
     } else {
       const {
@@ -151,7 +159,7 @@ export const updateProductById = async (req: Request, res: Response) => {
       }
       return res.status(200).json({
         message: "success updating product",
-        result: updatedProduct,
+        // result: product,
       });
     }
   });
@@ -165,17 +173,13 @@ export const deleteProductById = async (req: Request, res: Response) => {
   if (!product) {
     return res.status(404).json({ message: "Product not found" });
   }
-  const oldImage = product.image_link;
-  fs.unlink(oldImage, (err) => {
-    if (err) {
-      return console.log(err);
-    }
-    console.log("successfully deleted");
-  });
+  const old_image_public_id = product.cloudinary_public_id;
+
   const deletedProduct = await entityManager.delete(Products, id);
   if (!deletedProduct) {
     return res.status(500).send("Error deleting product");
   }
+  cloudinary.uploader.destroy(old_image_public_id, (error, result) => {});
   return res.status(200).json({
     message: "success deleting product",
   });
