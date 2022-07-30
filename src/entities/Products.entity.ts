@@ -39,7 +39,6 @@ export class Products extends BaseEntity {
   show_on_home: boolean;
 
   @ManyToOne(() => Client, (client) => client.products, {
-    cascade: true,
     nullable: true,
   })
   client: Client;

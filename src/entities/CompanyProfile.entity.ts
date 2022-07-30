@@ -21,6 +21,9 @@ export class CompanyProfile extends BaseEntity {
   image_link: string;
 
   @Column({ nullable: true })
+  image_cloudinary_public_id: string;
+
+  @Column({ nullable: true })
   title: string;
 
   @Column({ nullable: true })
@@ -34,6 +37,9 @@ export class CompanyProfile extends BaseEntity {
 
   @Column({ nullable: true })
   history_image_link: string;
+
+  @Column({ nullable: true })
+  history_image_cloudinary_public_id: string;
 
   @Column({ nullable: true })
   history_title: string;

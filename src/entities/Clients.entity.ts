@@ -39,8 +39,13 @@ export class Client extends BaseEntity {
   @Column()
   logo_image_link: string;
 
-  @OneToMany(() => Products, (products) => products.client)
+  @Column()
+  cloudinary_public_id: string;
 
+  @OneToMany(() => Products, (products) => products.client, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   @JoinTable({
     name: "client_products",
     joinColumn: { name: "client", referencedColumnName: "id" },

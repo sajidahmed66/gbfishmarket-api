@@ -14,7 +14,7 @@ export const logIn = async (req: Request, res: Response) => {
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.status(401).send("Invalid Email or Password nad more"); // 401 Unauthorized
+    return res.status(401).send("Invalid Email or Password"); // 401 Unauthorized
   }
   const token = user.generateAuthToken();
   return res.send({ token });
