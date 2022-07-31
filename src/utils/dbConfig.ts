@@ -14,11 +14,11 @@ export const main = async () => {
   try {
     await createConnection({
       type: "postgres",
-      host: process.env.POSTGRES_HOST_LOCAL,
-      port: Number(process.env.POSTGRES_PORT_LOCAL),
-      username: process.env.POSTGRES_USER_LOCAL,
-      password: process.env.POSTGRES_PASSWORD_LOCAL,
-      database: process.env.POSTGRES_DB_LOCAL,
+      host: process.env.POSTGRES_HOST,
+      port: Number(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
       entities: [
         RoleUser,
         User,
@@ -32,11 +32,11 @@ export const main = async () => {
         Message,
       ],
       synchronize: true,
-      //comment out for local db/production
-      // ssl: {
-      //   rejectUnauthorized: false,
-      //   requestCert: true,
-      // },
+      // comment out for local db/production
+      ssl: {
+        rejectUnauthorized: false,
+        requestCert: true,
+      },
     });
     console.log("Connected to database");
   } catch (error) {
