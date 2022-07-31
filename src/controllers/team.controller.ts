@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { TeamMember } from "../entities/TeamMember.entity";
-import { upload } from "../middlewares/multerConfig";
+import { upload, cloudinary } from "../middlewares/multerConfig";
 import multer from "multer";
 import * as fs from "fs";
 
@@ -32,6 +32,7 @@ export const createTeamMember = async (req: Request, res: Response) => {
         image_name,
         image_link: req.file.path,
         companyProfile: companyId,
+        cloudinary_public_id: req.file.filename,
       });
       let result = await entityManager.save(teamMember);
       if (!result) {
@@ -39,7 +40,7 @@ export const createTeamMember = async (req: Request, res: Response) => {
       }
       return res.status(201).json({
         message: "success creating team member",
-        result,
+        data: result,
       });
     } else {
       // TODO Implement better error handling
@@ -65,26 +66,26 @@ export const updateTeamMemberById = async (req: Request, res: Response) => {
       return res.status(404).send("Team Member not found");
     }
     if (req.file) {
-      const oldImage = teamMember.image_link;
-      fs.unlink(oldImage, (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        console.log("successfully deleted");
-      });
+      const oldImage_cloudinary_piblic_id = teamMember.cloudinary_public_id;
+
       teamMember.name = name ? name : teamMember.name;
       teamMember.designation = designation
         ? designation
         : teamMember.designation;
       teamMember.image_name = image_name;
       teamMember.image_link = req.file.path;
+      teamMember.cloudinary_public_id = req.file.filename;
       let result = await entityManager.save(teamMember);
       if (!result) {
         return res.status(500).send("Error updating team member");
       }
+      cloudinary.uploader.destroy(
+        oldImage_cloudinary_piblic_id,
+        (error, result) => {}
+      );
       return res.status(201).json({
         message: "success updating team member",
-        result,
+        data: result,
       });
     } else {
       teamMember.name = name ? name : teamMember.name;
@@ -98,7 +99,7 @@ export const updateTeamMemberById = async (req: Request, res: Response) => {
       }
       return res.status(201).json({
         message: "success updating team member",
-        result,
+        data: result,
       });
     }
   });
@@ -111,19 +112,17 @@ export const deleteTeamMemberById = async (req: Request, res: Response) => {
   if (!teamMember) {
     return res.status(404).send("Team Member not found");
   }
-  const oldImage = teamMember.image_link;
-  fs.unlink(oldImage, (err) => {
-    if (err) {
-      return console.log(err);
-    }
-    console.log("successfully deleted");
-  });
+  const oldImage_cloudinary_piblic_id = teamMember.cloudinary_public_id;
+
   let result = await entityManager.delete(TeamMember, id);
   if (!result) {
     return res.status(500).send("Error deleting team member");
   }
+  cloudinary.uploader.destroy(
+    oldImage_cloudinary_piblic_id,
+    (error, result) => {}
+  );
   return res.status(201).json({
     message: "success deleting team member",
-    result,
   });
 };
