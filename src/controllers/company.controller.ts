@@ -60,7 +60,7 @@ export const createCompanyProfile = async (req: Request, res: Response) => {
 // company will always be the first entity in the database
 export const updateCompanyProfile = async (req: Request, res: Response) => {
   let { id } = req.params;
-  uploadMultiple(req, res, async (error) => {
+  uploadMultiple(req, res, async (error: any) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
         message: error.code,
@@ -111,7 +111,7 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
         companyProfile.image_cloudinary_public_id &&
           cloudinary.uploader.destroy(
             companyProfile.image_cloudinary_public_id,
-            (error, result) => {}
+            (error: any, result: any) => {}
           );
         companyProfile.image_link = files.image_link[0].path;
         companyProfile.image_name = image_name;
@@ -122,7 +122,10 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
         companyProfile.history_image_cloudinary_public_id &&
           cloudinary.uploader.destroy(
             companyProfile.history_image_cloudinary_public_id,
-            (error, result) => {}
+            (error: any, result: any) => {
+              console.log(error);
+              console.log(result);
+            }
           );
         companyProfile.history_image_link = files.history_image_link[0].path;
         companyProfile.history_image_name = history_image_name;

@@ -63,7 +63,7 @@ export const updateLogoById = async (req: Request, res: Response) => {
     // if requested logo not found
     if (!logo) {
       if (req.file) {
-        cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
+        cloudinary.uploader.destroy(req.file.filename, (error:any, result:any) => {});
       }
       return res.status(404).json({
         message: "Logo not found",
@@ -85,7 +85,7 @@ export const updateLogoById = async (req: Request, res: Response) => {
       }
       cloudinary.uploader.destroy(
         old_image_public_id,
-        function (error, result) {
+        function (error:any, result:any) {
           console.log({ result, error }); // result is an array
         }
       );
