@@ -25,6 +25,9 @@ export class Slider extends BaseEntity {
   description: string;
 
   @Column()
+  cloudinary_public_id: string;
+
+  @Column()
   show_on_home: boolean;
 
   @CreateDateColumn()

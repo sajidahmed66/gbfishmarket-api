@@ -25,6 +25,9 @@ export class TeamMember extends BaseEntity {
   @Column()
   image_link: string;
 
+  @Column()
+  cloudinary_public_id: string;
+
   @ManyToOne(
     () => CompanyProfile,
     (companyProfile) => companyProfile.teamMember,

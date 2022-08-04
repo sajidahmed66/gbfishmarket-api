@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { getManager } from "typeorm";
 import multer from "multer";
 import { Slider } from "../entities/Slider.entity";
-import { upload } from "../middlewares/multerConfig";
+import { cloudinary, upload } from "../middlewares/multerConfig";
 import * as fs from "fs";
 
 // Add slider Image , slider text and slider description
@@ -22,8 +22,9 @@ export const uploadSliderImage = async (req: Request, res: Response) => {
         name,
         title,
         description,
-        show_on_home: "true" ? true : false,
+        show_on_home: show_on_home === "true" ? true : false,
         file_link: req.file.path,
+        cloudinary_public_id: req.file.filename,
       });
       let result = await manager.save(newSliderImage);
       if (!result) {
@@ -31,7 +32,7 @@ export const uploadSliderImage = async (req: Request, res: Response) => {
       }
       return res.status(201).json({
         message: "success creating Banner",
-        result,
+        data: result,
       });
     } else {
       // TODO new Error("Error uploading file");
@@ -99,37 +100,36 @@ export const updateSliderImageById = async (req: Request, res: Response) => {
       return res.status(404).send("Slider not found");
     }
     if (req.file) {
-      const oldImage = slider.file_link;
-      fs.unlink(oldImage, (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        console.log("successfully deleted");
-      });
+      const oldImage_cloudinary_piblic_id = slider.cloudinary_public_id;
       const { name, title, description, show_on_home, file_link } = req.body;
-      const updatedSlider = await entityManager.update(Slider, sliderId, {
-        name,
-        title,
-        description,
-        show_on_home: "true" ? true : false,
-        file_link: req.file.path,
-      });
-      if (!updatedSlider) {
-        return res.status(500).send("Error updating Slider");
-      }
-      return res.status(200).json({
-        message: "success updating Slider",
-        result: updatedSlider,
-      });
-    } else {
-      const { name, title, description, show_on_home, file_link } = req.body;
-      
       const updatedSlider = await entityManager.update(Slider, sliderId, {
         name,
         title,
         description,
         show_on_home: show_on_home === "true" ? true : false,
-        file_link: file_link,
+        file_link: req.file.path,
+        cloudinary_public_id: req.file.filename,
+      });
+      if (!updatedSlider) {
+        return res.status(500).send("Error updating Slider");
+      }
+      cloudinary.uploader.destroy(
+        oldImage_cloudinary_piblic_id,
+        (error, result) => {}
+      );
+      return res.status(200).json({
+        message: "success updating Slider",
+        result: updatedSlider,
+      });
+    } else {
+      // to update content without image
+      const { name, title, description, show_on_home } = req.body;
+
+      const updatedSlider = await entityManager.update(Slider, sliderId, {
+        name,
+        title,
+        description,
+        show_on_home: show_on_home === "true" ? true : false,
       });
       if (!updatedSlider) {
         return res.status(500).send("Error updating Slider");
