@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
 } from "typeorm";
+import { CategoryProducts } from "./CategoryProducts.entity";
 
 import { Client } from "./Clients.entity";
 @Entity("products")
@@ -37,6 +38,11 @@ export class Products extends BaseEntity {
 
   @Column()
   show_on_home: boolean;
+
+  @ManyToOne(() => CategoryProducts, (category) => category.products, {
+    nullable: true,
+  })
+  category_products: CategoryProducts;
 
   @ManyToOne(() => Client, (client) => client.products, {
     nullable: true,

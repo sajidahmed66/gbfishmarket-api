@@ -26,6 +26,7 @@ export const routes = (app: Application) => {
   app.use("/api/admin/mycompany", companyRouter);
   app.use("/api/admin/myteam", teamRouter);
   app.use("/api/admin/products", productsRouter);
+  app.use("/api/admin/category-products", productsRouter);
   app.use("/api/admin/client", clientRouter);
   app.use("/api/admin/announcement", announcementRouter);
   app.use("/api/admin/contact-us", contactusRouter);
