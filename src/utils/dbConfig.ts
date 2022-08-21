@@ -34,7 +34,7 @@ export const main = async () => {
         CategoryProducts,
       ],
       synchronize: true,
-      //comment out for local db/production
+      // comment out for local db/production
       ssl: {
         rejectUnauthorized: false,
         requestCert: true,

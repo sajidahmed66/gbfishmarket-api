@@ -43,13 +43,28 @@ export const createAnnouncement = async (req: Request, res: Response) => {
   });
 };
 
+export const getAnnouncementById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const manager = getManager();
+  const result = await manager.findOne(Announcement, id);
+  if (!result) {
+    return res.status(404).json({
+      message: "Error getting announcement",
+    });
+  }
+  return res.status(200).json({
+    message: "success",
+    result: result,
+  });
+};
+
 export const getAllAnnouncement = async (req: Request, res: Response) => {
   console.log("getAllAnnouncement");
   const manager = getManager();
   let announcements = await manager.find(Announcement);
   console.log(announcements.length);
   if (announcements.length === 0) {
-    return res.status(500).json({
+    return res.status(404).json({
       message: "Error getting announcements/no announcements found",
     });
   }
@@ -75,7 +90,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
       if (req.file) {
         cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
       }
-      return res.status(500).json({
+      return res.status(400).json({
         message: "Cannot find announcement",
       });
     }
@@ -124,7 +139,7 @@ export const deleteAnnouncementById = async (req: Request, res: Response) => {
   const manager = getManager();
   let announcement = await manager.findOne(Announcement, id);
   if (!announcement) {
-    return res.status(500).json({
+    return res.status(404).json({
       message: "Cannot find announcement",
     });
   }

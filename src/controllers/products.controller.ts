@@ -3,7 +3,6 @@ import { getManager } from "typeorm";
 import { Products } from "../entities/Products.entity";
 import { upload, cloudinary } from "../middlewares/multerConfig";
 import multer from "multer";
-import * as fs from "fs";
 //create a product
 export const createProduct = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
@@ -130,9 +129,10 @@ export const updateProductById = async (req: Request, res: Response) => {
           // console.log({ result, error }); // result is an array
         }
       );
+      const newProduct = await entityManager.findOne(Products, id);
       return res.status(200).json({
         message: "success updating product",
-        // result: updatedProduct,
+        result: newProduct,
       });
     } else {
       const {
@@ -157,9 +157,11 @@ export const updateProductById = async (req: Request, res: Response) => {
       if (!updatedProduct) {
         return res.status(500).send("Error updating product");
       }
+      const newProduct = await entityManager.findOne(Products, id);
+
       return res.status(200).json({
         message: "success updating product",
-        // result: product,
+        result: newProduct,
       });
     }
   });
