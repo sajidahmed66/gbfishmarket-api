@@ -9,6 +9,7 @@ import * as fs from "fs";
 interface fileType {
   image_link?: string[];
   history_image_link?: string[];
+  ceo_message_image_link?: string[];
 }
 // boilerplate code
 export const getCompanyProfile = async (req: Request, res: Response) => {
@@ -30,6 +31,7 @@ export const getCompanyProfile = async (req: Request, res: Response) => {
 const uploadMultiple = upload.fields([
   { name: "image_link" },
   { name: "history_image_link" },
+  { name: "ceo_message_image_link" },
 ]);
 
 export const createCompanyProfile = async (req: Request, res: Response) => {
@@ -79,6 +81,11 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
       history_title,
       history_description,
       history_short_description,
+      ceo_message_image_name,
+      ceo_message_title,
+      ceo_message_description,
+      mission_title,
+      mission_description,
     } = req.body;
     const entityManager = getManager();
     const companyProfile = await entityManager.findOne(CompanyProfile, id);
@@ -104,6 +111,18 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
     companyProfile.history_short_description = history_short_description
       ? history_short_description
       : companyProfile.history_short_description;
+    companyProfile.ceo_message_title = ceo_message_title
+      ? ceo_message_title
+      : companyProfile.ceo_message_title;
+    companyProfile.ceo_message_description = ceo_message_description
+      ? ceo_message_description
+      : companyProfile.ceo_message_description;
+    companyProfile.mission_title = mission_title
+      ? mission_title
+      : companyProfile.mission_title;
+    companyProfile.mission_description = mission_description
+      ? mission_description
+      : companyProfile.mission_description;
 
     if (!_.isEmpty(req.files)) {
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -131,6 +150,24 @@ export const updateCompanyProfile = async (req: Request, res: Response) => {
         companyProfile.history_image_name = history_image_name;
         companyProfile.history_image_cloudinary_public_id =
           files.history_image_link[0].filename;
+      }
+      if (
+        files.ceo_message_image_link &&
+        files.ceo_message_image_link.length > 0
+      ) {
+        companyProfile.ceo_message_image_cloudinary_public_id &&
+          cloudinary.uploader.destroy(
+            companyProfile.ceo_message_image_cloudinary_public_id,
+            (error: any, result: any) => {
+              console.log(error);
+              console.log(result);
+            }
+          );
+        companyProfile.ceo_message_image_link =
+          files.ceo_message_image_link[0].path;
+        companyProfile.ceo_message_image_name = ceo_message_image_name;
+        companyProfile.ceo_message_image_cloudinary_public_id =
+          files.ceo_message_image_link[0].filename;
       }
     } else {
       return res.status(400).json({

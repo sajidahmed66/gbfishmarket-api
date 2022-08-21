@@ -49,6 +49,27 @@ export class CompanyProfile extends BaseEntity {
 
   @Column({ nullable: true })
   history_short_description: string;
+  
+  @Column({ nullable: true })
+  ceo_message_image_name: string;
+
+  @Column({ nullable: true })
+  ceo_message_image_link: string;
+
+  @Column({ nullable: true })
+  ceo_message_image_cloudinary_public_id: string;
+
+  @Column({ nullable: true })
+  ceo_message_title: string;
+
+  @Column({ nullable: true })
+  ceo_message_description: string;
+
+  @Column({ nullable: true })
+  mission_title: string;
+
+  @Column({ nullable: true })
+  mission_description: string;
 
   @Column({ nullable: true })
   address: string;

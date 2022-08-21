@@ -15,14 +15,8 @@ export class Announcement extends BaseEntity {
   @Column()
   title: string;
 
-  // @Column()
-  // subtitle: string;
-
   @Column()
   short_description: string;
-
-  // @Column()
-  // long_description: string;
 
   @Column()
   image_name: string;
