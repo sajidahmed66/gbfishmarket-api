@@ -4,6 +4,7 @@ import {
   updateCategoryProductById,
   deleteCategoryProductById,
   getAllCategoryProduct,
+  getCategoryProductById,
 } from "../controllers/categoryProducts.controller";
 import { authorize } from "../middlewares/authorize";
 const router = Router();
@@ -12,6 +13,7 @@ router.route("/").post([authorize], createCategoryProduct).get(getAllCategoryPro
 
 router
   .route("/:id")
+  .get([authorize],getCategoryProductById)
   .put([authorize], updateCategoryProductById)
   .delete([authorize], deleteCategoryProductById);
 
