@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getManager } from "typeorm";
-import { Announcement } from "../entities/Announcement.entity";
+import { CategoryProducts } from "../entities/CategoryProducts.entity";
 import { upload } from "../middlewares/multerConfig";
 import multer from "multer";
 
@@ -15,24 +15,23 @@ export const createCategoryProduct = async (req: Request, res: Response) => {
       });
     }
     if (req.file) {
-      const { title, short_description, image_name, show_on_home } = req.body;
+      const { title, image_name, show_on_home } = req.body;
       const manager = getManager();
-      const newAnnouncement = manager.create(Announcement, {
+      const newCategory = manager.create(CategoryProducts, {
         title,
-        short_description,
         image_name,
         show_on_home: show_on_home === "true" ? true : false,
         image_link: req.file.path,
         cloudinary_public_id: req.file.filename,
       });
-      let result = await manager.save(newAnnouncement);
+      let result = await manager.save(newCategory);
       if (!result) {
         return res.status(500).json({
-          message: "Error creating announcement",
+          message: "Error creating a new category",
         });
       }
       return res.status(200).json({
-        message: "success",
+        message: "success creating a new category",
         result: result,
       });
     } else {
@@ -46,20 +45,22 @@ export const createCategoryProduct = async (req: Request, res: Response) => {
 export const getAllCategoryProduct = async (req: Request, res: Response) => {
   console.log("getAllAnnouncement");
   const manager = getManager();
-  let announcements = await manager.find(Announcement);
-  console.log(announcements.length);
-  if (announcements.length === 0) {
+  let allcategories = await manager.find(CategoryProducts);
+  if (allcategories.length === 0) {
     return res.status(500).json({
-      message: "Error getting announcements/no announcements found",
+      message: "Error getting category/no category is found",
     });
   }
   return res.status(200).json({
     message: "success",
-    announcements: announcements,
+    categories: allcategories,
   });
 };
 
-export const updateCategoryProductById = async (req: Request, res: Response) => {
+export const updateCategoryProductById = async (
+  req: Request,
+  res: Response
+) => {
   upload.single("file")(req, res, async (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
@@ -68,76 +69,78 @@ export const updateCategoryProductById = async (req: Request, res: Response) => 
     }
 
     const { id } = req.params;
-    const { title, short_description, image_name, show_on_home } = req.body;
+    const { title, image_name, show_on_home } = req.body;
     const manager = getManager();
-    let announcement = await manager.findOne(Announcement, id);
-    if (!announcement) {
+    let category = await manager.findOne(CategoryProducts, id);
+    if (!category) {
       if (req.file) {
         cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
       }
       return res.status(500).json({
-        message: "Cannot find announcement",
+        message: "Cannot find category",
       });
     }
-    // if announcement found
+    // if category  is  found
     if (req.file) {
-      let old_image_public_id = announcement.cloudinary_public_id;
-      announcement.title = title;
-      announcement.short_description = short_description;
-      announcement.image_name = image_name;
-      announcement.show_on_home = show_on_home === "true" ? true : false;
-      announcement.image_link = req.file.path;
-      announcement.cloudinary_public_id = req.file.filename;
-      let result = await manager.save(announcement);
+      let old_image_public_id = category.cloudinary_public_id;
+      category.title = title;
+      category.image_name = image_name;
+      category.show_on_home = show_on_home === "true" ? true : false;
+      category.image_link = req.file.path;
+      category.cloudinary_public_id = req.file.filename;
+      let result = await manager.save(category);
+
       if (!result) {
         return res.status(500).json({
-          message: "Error updating announcement",
+          message: "Error updating category",
         });
       }
       cloudinary.uploader.destroy(old_image_public_id, (error, result) => {});
       return res.status(200).json({
         message: "success",
-        result: announcement,
+        result: category,
       });
     } else {
       // if no file uploaded but data to be updated
-      announcement.title = title;
-      announcement.short_description = short_description;
-      announcement.image_name = image_name;
-      announcement.show_on_home = show_on_home === "true" ? true : false;
-      let result = await manager.save(announcement);
+      category.title = title;
+      category.image_name = image_name;
+      category.show_on_home = show_on_home === "true" ? true : false;
+      let result = await manager.save(category);
       if (!result) {
         return res.status(500).json({
-          message: "Error updating announcement",
+          message: "Error updating category",
         });
       }
       return res.status(200).json({
         message: "success",
-        result: announcement,
+        result: category,
       });
     }
   });
 };
 
-export const deleteCategoryProductById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const manager = getManager();
-  let announcement = await manager.findOne(Announcement, id);
-  if (!announcement) {
-    return res.status(500).json({
-      message: "Cannot find announcement",
-    });
-  }
-  let old_image_public_id = announcement.cloudinary_public_id;
-  let result = await manager.delete(Announcement, { id });
+// export const deleteCategoryProductById = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const { id } = req.params;
+//   const manager = getManager();
+//   let category = await manager.findOne(CategoryProducts, id);
+//   if (!category) {
+//     return res.status(500).json({
+//       message: "Cannot find category",
+//     });
+//   }
+//   let old_image_public_id = category.cloudinary_public_id;
+//   let result = await manager.delete(CategoryProducts, { id });
 
-  if (!result) {
-    return res.status(500).json({
-      message: "Error deleting announcement",
-    });
-  }
-  cloudinary.uploader.destroy(old_image_public_id, (error, result) => {});
-  return res.status(200).json({
-    message: "Announcement deleted",
-  });
-};
+//   if (!result) {
+//     return res.status(500).json({
+//       message: "Error deleting category",
+//     });
+//   }
+//   cloudinary.uploader.destroy(old_image_public_id, (error, result) => {});
+//   return res.status(200).json({
+//     message: "Category deleted",
+//   });
+// };

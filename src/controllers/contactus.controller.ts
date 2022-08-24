@@ -6,7 +6,7 @@ export const getAllContactMessage = async (req: Request, res: Response) => {
   const manager = getManager();
   const messages = await manager.find(Message);
   if (!messages)
-    return res.status(200).json({
+    return res.status(500).json({
       message: "No messages found",
     });
   return res.status(200).json({

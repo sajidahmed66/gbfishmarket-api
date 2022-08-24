@@ -61,7 +61,7 @@ export const getAllClient = async (req: Request, res: Response) => {
   let clients = await manager.find(Client);
   console.log(clients.length);
   if (clients.length === 0) {
-    return res.status(500).json({
+    return res.status(404).json({
       message: "No clients Found",
     });
   }
