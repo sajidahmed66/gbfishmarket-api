@@ -17,7 +17,7 @@ export const getCompanyProfile = async (req: Request, res: Response) => {
   const companyProfile = await entityManager.find(CompanyProfile, {
     order: { id: "ASC" },
   });
-  console.log(companyProfile);
+  // console.log(companyProfile);
   if (!companyProfile) {
     return res.status(404).send("Company Profile not found");
   }

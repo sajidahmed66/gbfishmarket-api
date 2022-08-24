@@ -54,7 +54,7 @@ export const getAllSliders = async (req: Request, res: Response) => {
     }
     return res.send(result);
   } catch (error) {
-    console.log("Invalid Input", error);
+    // console.log("Invalid Input", error);
     return res.status(400).json({
       msg: "Invalid Input",
       error,
@@ -74,7 +74,7 @@ export const getSliderById = async (req: Request, res: Response) => {
     }
     return res.send(result);
   } catch (error) {
-    console.log("Invalid Input", error);
+    // console.log("Invalid Input", error);
     return res.status(400).json({
       msg: "Invalid Input",
       error,
@@ -86,7 +86,7 @@ export const getSliderById = async (req: Request, res: Response) => {
 
 export const updateSliderImageById = async (req: Request, res: Response) => {
   upload.single("file")(req, res, async (error) => {
-    console.log("updateProductById");
+    // console.log("updateProductById");
     const { sliderId } = req.params;
     if (error instanceof multer.MulterError) {
       return res.send(500).json({
