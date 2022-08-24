@@ -45,7 +45,7 @@ export const createCategoryProduct = async (req: Request, res: Response) => {
 export const getAllCategoryProduct = async (req: Request, res: Response) => {
   const manager = getManager();
   let categoryProducts = await manager.find(CategoryProducts);
-  console.log(categoryProducts.length);
+  // console.log(categoryProducts.length);
   if (categoryProducts.length === 0) {
     return res.status(500).json({
       message: "Error getting categoryProducts/no categoryProducts found",
@@ -65,9 +65,11 @@ export const getCategoryProductById = async (req: Request, res: Response) => {
     if (!result) {
       return res.status(404).send("Category products not found");
     }
-    return res.send(result);
+    return res.status(200).send({
+      message: "success",
+      category: result,
+    });
   } catch (error) {
-    console.log("Invalid Input", error);
     return res.status(400).json({
       msg: "Invalid Input",
       error,
@@ -95,7 +97,7 @@ export const updateCategoryProductById = async (
         cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
       }
       return res.status(500).json({
-        message: "Cannot find categoryProducts",
+        message: "Cannot find the category",
       });
     }
     // if categoryProducts found
@@ -114,22 +116,21 @@ export const updateCategoryProductById = async (
       }
       cloudinary.uploader.destroy(old_image_public_id, (error, result) => {});
       return res.status(200).json({
-        message: "success",
+        message: "success updating category",
         result: categoryProducts,
       });
     } else {
       // if no file uploaded but data to be updated
       categoryProducts.title = title;
-      categoryProducts.image_name = image_name;
       categoryProducts.show_on_home = show_on_home === "true" ? true : false;
       let result = await manager.save(categoryProducts);
       if (!result) {
         return res.status(500).json({
-          message: "Error updating categoryProducts",
+          message: "Error updating category",
         });
       }
       return res.status(200).json({
-        message: "success",
+        message: "success updating category",
         result: categoryProducts,
       });
     }

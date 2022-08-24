@@ -16,7 +16,7 @@ router
 
 router
   .route("/:id")
-  .get([authorize], getCategoryProductById)
+  .get(getCategoryProductById)
   .put([authorize], updateCategoryProductById)
   .delete([authorize], deleteCategoryProductById);
 
