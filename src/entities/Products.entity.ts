@@ -42,7 +42,7 @@ export class Products extends BaseEntity {
   @ManyToOne(() => CategoryProducts, (category) => category.products, {
     nullable: true,
   })
-  category_products: CategoryProducts;
+  category: CategoryProducts;
 
   @ManyToOne(() => Client, (client) => client.products, {
     nullable: true,

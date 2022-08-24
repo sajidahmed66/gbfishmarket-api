@@ -19,6 +19,7 @@ export const createProduct = async (req: Request, res: Response) => {
       image_name,
       show_on_home,
       client_id,
+      category_id,
     } = req.body;
 
     if (req.file) {
@@ -31,6 +32,7 @@ export const createProduct = async (req: Request, res: Response) => {
         image_name,
         show_on_home: show_on_home === "true" ? true : false,
         client: client_id,
+        category:category_id,
         image_link: req.file.path,
         cloudinary_public_id: req.file.filename,
       });
@@ -105,6 +107,7 @@ export const updateProductById = async (req: Request, res: Response) => {
         image_name,
         show_on_home,
         client_id,
+        category_id,
       } = req.body;
       const updatedProduct = await entityManager.update(Products, id, {
         title,
@@ -114,6 +117,7 @@ export const updateProductById = async (req: Request, res: Response) => {
         image_name,
         show_on_home: show_on_home === "true" ? true : false,
         client: client_id,
+        category: category_id,
         image_link: req.file.path,
         cloudinary_public_id: req.file.filename,
       });
@@ -143,6 +147,7 @@ export const updateProductById = async (req: Request, res: Response) => {
         image_name,
         show_on_home,
         client_id,
+        category_id,
       } = req.body;
       console.log(show_on_home);
       const updatedProduct = await entityManager.update(Products, id, {
@@ -153,6 +158,7 @@ export const updateProductById = async (req: Request, res: Response) => {
         image_name,
         show_on_home: show_on_home === "true" ? true : false,
         client: client_id,
+        category:category_id
       });
       if (!updatedProduct) {
         return res.status(500).send("Error updating product");

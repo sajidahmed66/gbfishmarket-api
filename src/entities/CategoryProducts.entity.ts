@@ -29,7 +29,7 @@ export class CategoryProducts extends BaseEntity {
   @Column()
   show_on_home: boolean;
 
-  @OneToMany(() => Products, (products) => products.category_products, {
+  @OneToMany(() => Products, (products) => products.category, {
     cascade: true,
     onDelete: "CASCADE",
   })
