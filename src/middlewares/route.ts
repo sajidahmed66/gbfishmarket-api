@@ -12,6 +12,7 @@ import { clientRouter } from "../routes/clientRouter";
 import { announcementRouter } from "../routes/announcementRouter";
 import { contactusRouter } from "../routes/contactusRouter";
 import { categoryProductsRouter } from "../routes/categoryProductsRouter";
+import { categoryAnnouncementsRouter } from "../routes/categoryAnnouncementsRouter";
 export const routes = (app: Application) => {
   app.use(cors());
   app.use(express.json());
@@ -28,6 +29,7 @@ export const routes = (app: Application) => {
   app.use("/api/admin/myteam", teamRouter);
   app.use("/api/admin/products", productsRouter);
   app.use("/api/admin/category-products", categoryProductsRouter);
+  app.use("/api/admin/category-announcements", categoryAnnouncementsRouter);
   app.use("/api/admin/client", clientRouter);
   app.use("/api/admin/announcement", announcementRouter);
   app.use("/api/admin/contact-us", contactusRouter);

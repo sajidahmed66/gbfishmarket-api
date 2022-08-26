@@ -5,20 +5,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  OneToMany,
 } from "typeorm";
-import { CategoryAnnouncements } from "./CategoryAnnouncements.entity";
+import { Announcement } from "./Announcement.entity";
 
-@Entity("announcement")
-export class Announcement extends BaseEntity {
+@Entity("category_announcements")
+export class CategoryAnnouncements extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   title: string;
-
-  @Column()
-  short_description: string;
 
   @Column()
   image_name: string;
@@ -31,12 +28,12 @@ export class Announcement extends BaseEntity {
 
   @Column()
   show_on_home: boolean;
-  
-  @ManyToOne(() => CategoryAnnouncements, (category) => category.announcement, {
-    nullable: true,
+
+  @OneToMany(() => Announcement, (announcement) => announcement.announcementCategory, {
+    cascade: true,
     onDelete: "CASCADE",
   })
-  announcementCategory: CategoryAnnouncements;
+  announcement: Announcement[];
 
   @CreateDateColumn()
   created_at: Date;
