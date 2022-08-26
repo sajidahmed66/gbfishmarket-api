@@ -59,10 +59,10 @@ export const getAnnouncementById = async (req: Request, res: Response) => {
 };
 
 export const getAllAnnouncement = async (req: Request, res: Response) => {
-  console.log("getAllAnnouncement");
+  // console.log("getAllAnnouncement");
   const manager = getManager();
   let announcements = await manager.find(Announcement);
-  console.log(announcements.length);
+  // console.log(announcements.length);
   if (announcements.length === 0) {
     return res.status(404).json({
       message: "Error getting announcements/no announcements found",

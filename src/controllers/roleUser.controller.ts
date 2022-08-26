@@ -11,7 +11,7 @@ export const role = async (req: Request, res: Response) => {
     res.send(roleUser);
   } catch (error) {
     res.status(400).send("something went wrong");
-    console.log("Invalid Input", error);
+    // console.log("Invalid Input", error);
   }
 };
 

@@ -28,7 +28,7 @@ export const addUser = async (req: Request, res: Response) => {
       user: newUser,
     });
   } catch (error) {
-    console.log("Invalid Input", error);
+    // console.log("Invalid Input", error);
     return res.status(400).json({
       msg: "Invalid Input",
       error,
@@ -55,7 +55,7 @@ export const getUserById = async (req: Request, res: Response) => {
     }
     return res.send(result);
   } catch (error) {
-    console.log("Invalid Input", error);
+    // console.log("Invalid Input", error);
     return res.status(400).json({
       msg: "Invalid Input",
       error,
@@ -84,7 +84,7 @@ export const updateUser = async (req: Request, res: Response) => {
     // console.log("result", result.raw[0]);
     return res.send(result.raw[0]);
   } catch (error) {
-    console.log("Invalid Input", error);
+    // console.log("Invalid Input", error);
     return res.status(400).json({
       msg: "Invalid Input",
       error,

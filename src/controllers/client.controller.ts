@@ -56,12 +56,12 @@ export const createClient = async (req: Request, res: Response) => {
 };
 
 export const getAllClient = async (req: Request, res: Response) => {
-  console.log("getAllClient");
+  // console.log("getAllClient");
   const manager = getManager();
   let clients = await manager.find(Client);
-  console.log(clients.length);
+  // console.log(clients.length);
   if (clients.length === 0) {
-    return res.status(500).json({
+    return res.status(404).json({
       message: "No clients Found",
     });
   }

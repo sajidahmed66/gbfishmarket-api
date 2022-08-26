@@ -9,11 +9,14 @@ import {
 import { authorize } from "../middlewares/authorize";
 const router = Router();
 
-router.route("/").post([authorize], createCategoryProduct).get(getAllCategoryProduct);
+router
+  .route("/")
+  .post([authorize], createCategoryProduct)
+  .get(getAllCategoryProduct);
 
 router
   .route("/:id")
-  .get([authorize],getCategoryProductById)
+  .get(getCategoryProductById)
   .put([authorize], updateCategoryProductById)
   .delete([authorize], deleteCategoryProductById);
 
