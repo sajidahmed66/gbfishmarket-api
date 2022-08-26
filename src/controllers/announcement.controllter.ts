@@ -118,7 +118,6 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
       // if no file uploaded but data to be updated
       announcement.title = title;
       announcement.short_description = short_description;
-      announcement.image_name = image_name;
       announcement.show_on_home = show_on_home === "true" ? true : false;
       let result = await manager.save(announcement);
       if (!result) {
