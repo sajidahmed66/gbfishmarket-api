@@ -45,7 +45,6 @@ export const createCategoryAnnouncement = async (req: Request, res: Response) =>
 export const getAllCategoryAnnouncement = async (req: Request, res: Response) => {
   const manager = getManager();
   let categoryAnnouncements = await manager.find(CategoryAnnouncements);
-  console.log(categoryAnnouncements.length);
   if (categoryAnnouncements.length === 0) {
     return res.status(500).json({
       message: "Error getting category Announcements/no categoryAnnouncements found",

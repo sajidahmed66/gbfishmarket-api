@@ -8,6 +8,7 @@ import {
   ManyToOne,
 } from "typeorm";
 import { CategoryAnnouncements } from "./CategoryAnnouncements.entity";
+import { CategoryProducts } from "./CategoryProducts.entity";
 
 @Entity("announcement")
 export class Announcement extends BaseEntity {
@@ -32,9 +33,8 @@ export class Announcement extends BaseEntity {
   @Column()
   show_on_home: boolean;
   
-  @ManyToOne(() => CategoryAnnouncements, (category) => category.announcement, {
+  @ManyToOne(() => CategoryAnnouncements, (category) => category.announcements, {
     nullable: true,
-    onDelete: "CASCADE",
   })
   announcementCategory: CategoryAnnouncements;
 

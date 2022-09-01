@@ -13,7 +13,7 @@ router.route("/").post([authorize], createCategoryAnnouncement).get(getAllCatego
 
 router
   .route("/:id")
-  .get([authorize],getCategoryAnnouncementById)
+  .get(getCategoryAnnouncementById)
   .put([authorize], updateCategoryAnnouncementById)
   .delete([authorize], deleteCategoryAnnouncementById);
 
