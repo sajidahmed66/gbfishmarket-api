@@ -15,12 +15,13 @@ export const createAnnouncement = async (req: Request, res: Response) => {
       });
     }
     if (req.file) {
-      const { title, short_description, image_name, show_on_home } = req.body;
+      const { title, short_description, image_name, show_on_home,announcementCategory_id } = req.body;
       const manager = getManager();
       const newAnnouncement = manager.create(Announcement, {
         title,
         short_description,
         image_name,
+        announcementCategory: announcementCategory_id,
         show_on_home: show_on_home === "true" ? true : false,
         image_link: req.file.path,
         cloudinary_public_id: req.file.filename,
@@ -83,7 +84,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
     }
 
     const { id } = req.params;
-    const { title, short_description, image_name, show_on_home } = req.body;
+    const { title, short_description, image_name, show_on_home,announcementCategory_id } = req.body;
     const manager = getManager();
     let announcement = await manager.findOne(Announcement, id);
     if (!announcement) {
@@ -99,6 +100,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
       let old_image_public_id = announcement.cloudinary_public_id;
       announcement.title = title;
       announcement.short_description = short_description;
+      announcement.announcementCategory = announcementCategory_id;
       announcement.image_name = image_name;
       announcement.show_on_home = show_on_home === "true" ? true : false;
       announcement.image_link = req.file.path;
@@ -118,7 +120,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
       // if no file uploaded but data to be updated
       announcement.title = title;
       announcement.short_description = short_description;
-      announcement.image_name = image_name;
+      announcement.announcementCategory = announcementCategory_id;
       announcement.show_on_home = show_on_home === "true" ? true : false;
       let result = await manager.save(announcement);
       if (!result) {
