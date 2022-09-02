@@ -36,7 +36,7 @@ export class Announcement extends BaseEntity {
   @ManyToOne(() => CategoryAnnouncements, (category) => category.announcements, {
     nullable: true,
   })
-  announcementCategory: CategoryAnnouncements;
+  announcement_category: CategoryAnnouncements;
 
   @CreateDateColumn()
   created_at: Date;

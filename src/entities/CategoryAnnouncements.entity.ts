@@ -31,7 +31,7 @@ export class CategoryAnnouncements extends BaseEntity {
   @Column()
   show_on_home: boolean;
   
-  @OneToMany(() => Announcement, (announcement) => announcement.announcementCategory, {
+  @OneToMany(() => Announcement, (announcement) => announcement.announcement_category, {
     cascade: true,
     onDelete: "CASCADE",
   })

@@ -21,8 +21,8 @@ export const createAnnouncement = async (req: Request, res: Response) => {
         title,
         short_description,
         image_name,
-        announcementCategory: announcementCategory_id,
         show_on_home: show_on_home === "true" ? true : false,
+        announcement_category: announcementCategory_id,
         image_link: req.file.path,
         cloudinary_public_id: req.file.filename,
       });
@@ -60,10 +60,9 @@ export const getAnnouncementById = async (req: Request, res: Response) => {
 };
 
 export const getAllAnnouncement = async (req: Request, res: Response) => {
-  // console.log("getAllAnnouncement");
   const manager = getManager();
   let announcements = await manager.find(Announcement);
-  // console.log(announcements.length);
+  console.log(announcements);
   if (announcements.length === 0) {
     return res.status(404).json({
       message: "Error getting announcements/no announcements found",
@@ -84,7 +83,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
     }
 
     const { id } = req.params;
-    const { title, short_description, image_name, show_on_home,announcementCategory_id } = req.body;
+    const { title, short_description, image_name, show_on_home,announcement_category_id } = req.body;
     const manager = getManager();
     let announcement = await manager.findOne(Announcement, id);
     if (!announcement) {
@@ -100,7 +99,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
       let old_image_public_id = announcement.cloudinary_public_id;
       announcement.title = title;
       announcement.short_description = short_description;
-      announcement.announcementCategory = announcementCategory_id;
+      announcement.announcement_category = announcement_category_id;
       announcement.image_name = image_name;
       announcement.show_on_home = show_on_home === "true" ? true : false;
       announcement.image_link = req.file.path;
@@ -120,7 +119,7 @@ export const updateAnnounceMentById = async (req: Request, res: Response) => {
       // if no file uploaded but data to be updated
       announcement.title = title;
       announcement.short_description = short_description;
-      announcement.announcementCategory = announcementCategory_id;
+      announcement.announcement_category = announcement_category_id;
       announcement.show_on_home = show_on_home === "true" ? true : false;
       let result = await manager.save(announcement);
       if (!result) {
