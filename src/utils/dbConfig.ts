@@ -10,7 +10,7 @@ import { Client } from "../entities/Clients.entity";
 import { Announcement } from "../entities/Announcement.entity";
 import { Message } from "../entities/ContactMessage.entity";
 import { CategoryProducts } from "../entities/CategoryProducts.entity";
-
+import { CategoryAnnouncements } from "../entities/CategoryAnnouncements.entity";
 export const main = async () => {
   try {
     await createConnection({
@@ -32,6 +32,7 @@ export const main = async () => {
         Products,
         Message,
         CategoryProducts,
+        CategoryAnnouncements,
       ],
       synchronize: true,
       //comment out for local db/production
