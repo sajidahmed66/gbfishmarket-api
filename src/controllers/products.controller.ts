@@ -61,7 +61,9 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getAllProducts = async (req: Request, res: Response) => {
   const entityManager = getManager();
-  const products = await entityManager.find(Products);
+  const products = await entityManager.find(Products, {
+    relations: ["category", "client"],
+  });
   if (!products) {
     return res.status(404).send("NO Products was found");
   }
@@ -72,7 +74,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
 export const getProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const entityManager = getManager();
-  const product = await entityManager.findOne(Products, id);
+  const product = await entityManager.findOne(Products, id, {
+    relations: ["category", "client"],
+  });
   if (!product) {
     return res.status(404).send("Product not found");
   }

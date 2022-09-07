@@ -6,8 +6,12 @@ import multer from "multer";
 import { cloudinary } from "../middlewares/multerConfig";
 import _ from "lodash";
 import { CategoryAnnouncements } from "../entities/CategoryAnnouncements.entity";
+import { main } from "../utils/dbConfig";
 
-export const createCategoryAnnouncement = async (req: Request, res: Response) => {
+export const createCategoryAnnouncement = async (
+  req: Request,
+  res: Response
+) => {
   upload.single("file")(req, res, async (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
@@ -42,12 +46,16 @@ export const createCategoryAnnouncement = async (req: Request, res: Response) =>
   });
 };
 
-export const getAllCategoryAnnouncement = async (req: Request, res: Response) => {
+export const getAllCategoryAnnouncement = async (
+  req: Request,
+  res: Response
+) => {
   const manager = getManager();
   let categoryAnnouncements = await manager.find(CategoryAnnouncements);
   if (categoryAnnouncements.length === 0) {
     return res.status(500).json({
-      message: "Error getting category Announcements/no categoryAnnouncements found",
+      message:
+        "Error getting category Announcements/no categoryAnnouncements found",
     });
   }
   return res.status(200).json({
@@ -56,8 +64,10 @@ export const getAllCategoryAnnouncement = async (req: Request, res: Response) =>
   });
 };
 
-
-export const getCategoryAnnouncementById = async (req: Request, res: Response) => {
+export const getCategoryAnnouncementById = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { id } = req.params;
     const entityManager = getManager();
@@ -75,7 +85,10 @@ export const getCategoryAnnouncementById = async (req: Request, res: Response) =
   }
 };
 
-export const updateCategoryAnnouncementById = async (req: Request, res: Response) => {
+export const updateCategoryAnnouncementById = async (
+  req: Request,
+  res: Response
+) => {
   upload.single("file")(req, res, async (error) => {
     if (error instanceof multer.MulterError) {
       return res.status(500).json({
@@ -84,9 +97,12 @@ export const updateCategoryAnnouncementById = async (req: Request, res: Response
     }
 
     const { id } = req.params;
-    const { title,  image_name, show_on_home } = req.body;
+    const { title, image_name, show_on_home } = req.body;
     const manager = getManager();
-    let categoryAnnouncements = await manager.findOne(CategoryAnnouncements, id);
+    let categoryAnnouncements = await manager.findOne(
+      CategoryAnnouncements,
+      id
+    );
     if (!categoryAnnouncements) {
       if (req.file) {
         cloudinary.uploader.destroy(req.file.filename, (error, result) => {});
@@ -100,7 +116,8 @@ export const updateCategoryAnnouncementById = async (req: Request, res: Response
       let old_image_public_id = categoryAnnouncements.cloudinary_public_id;
       categoryAnnouncements.title = title;
       categoryAnnouncements.image_name = image_name;
-      categoryAnnouncements.show_on_home = show_on_home === "true" ? true : false;
+      categoryAnnouncements.show_on_home =
+        show_on_home === "true" ? true : false;
       categoryAnnouncements.image_link = req.file.path;
       categoryAnnouncements.cloudinary_public_id = req.file.filename;
       let result = await manager.save(categoryAnnouncements);
@@ -118,7 +135,8 @@ export const updateCategoryAnnouncementById = async (req: Request, res: Response
       // if no file uploaded but data to be updated
       categoryAnnouncements.title = title;
       categoryAnnouncements.image_name = image_name;
-      categoryAnnouncements.show_on_home = show_on_home === "true" ? true : false;
+      categoryAnnouncements.show_on_home =
+        show_on_home === "true" ? true : false;
       let result = await manager.save(categoryAnnouncements);
       if (!result) {
         return res.status(500).json({
@@ -133,7 +151,10 @@ export const updateCategoryAnnouncementById = async (req: Request, res: Response
   });
 };
 
-export const deleteCategoryAnnouncementById = async (req: Request, res: Response) => {
+export const deleteCategoryAnnouncementById = async (
+  req: Request,
+  res: Response
+) => {
   const { id } = req.params;
   const manager = getManager();
   let categoryAnnouncements = await manager.findOne(CategoryAnnouncements, id);
