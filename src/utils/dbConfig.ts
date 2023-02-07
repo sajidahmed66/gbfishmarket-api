@@ -32,14 +32,14 @@ export const main = async () => {
         Products,
         Message,
         CategoryProducts,
-        CategoryAnnouncements,
+        CategoryAnnouncements
       ],
       synchronize: true,
       //comment out for local db/production
-      ssl: {
-        rejectUnauthorized: false,
-        requestCert: true,
-      },
+      // ssl: {
+      //   rejectUnauthorized: false,
+      //   requestCert: true,
+      // },
     });
     console.log("Connected to database");
   } catch (error) {
