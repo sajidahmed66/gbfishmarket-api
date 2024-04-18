@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  database:
+    image: postgres
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: fishmarket
+    ports:
+      - 5432:5432
